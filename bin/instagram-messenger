@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+require dirname(__DIR__).'/vendor/autoload.php';
+
+use InstagramMessenger\Command\GetThreadCommand;
+use InstagramMessenger\Command\GetThreadsCommand;
+use InstagramMessenger\Command\LoginCommand;
+use InstagramMessenger\Enricher\ThreadItemEnricher;
+use InstagramMessenger\Helper\UserHelper;
+use InstagramMessenger\Printer\HumanReadableMessagePrinter;
+use InstagramMessenger\Printer\HumanReadableThreadPrinter;
+use InstagramMessenger\Printer\ThreadPrinterFactory;
+use Phpfastcache\Drivers\Files\Config;
+use Phpfastcache\Helper\Psr16Adapter;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$cache = new Psr16Adapter('Files', new Config([
+        'defaultTtl' => 60480,  // one week
+]));
+
+$threadPrinterFactory = new ThreadPrinterFactory();
+$threadPrinterFactory->addPrinter('human', new HumanReadableThreadPrinter(new HumanReadableMessagePrinter($cache, new UserHelper($cache))));
+
+$application->add(new LoginCommand($cache));
+$application->add(new GetThreadsCommand($cache));
+$application->add(new GetThreadCommand($cache, $threadPrinterFactory));
+
+$application->run();

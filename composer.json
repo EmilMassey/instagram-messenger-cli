@@ -1,0 +1,21 @@
+{
+    "name": "emilmassey/instagram-messenger-cli",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Emil Masiakowski",
+            "email": "emil@empressia.pl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "InstagramMessenger\\": "src/"
+        }
+    },
+    "require": {
+        "raiym/instagram-php-scraper": "^0.10.0",
+        "symfony/console": "^5.1",
+        "guzzlehttp/guzzle": "^7.2",
+        "phpfastcache/phpfastcache": "^8.0"
+    }
+}
