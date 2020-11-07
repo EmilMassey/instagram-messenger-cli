@@ -2,14 +2,7 @@
 
 namespace InstagramMessenger\Command;
 
-use GuzzleHttp\Client;
-use InstagramMessenger\Enricher\ThreadItemEnricher;
-use InstagramMessenger\Helper\UserHelper;
 use InstagramMessenger\Printer\ThreadPrinterFactory;
-use InstagramMessenger\Printer\ThreadPrinterInterface;
-use InstagramScraper\Exception\InstagramAuthException;
-use InstagramScraper\Instagram;
-use InstagramScraper\Model\Thread;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

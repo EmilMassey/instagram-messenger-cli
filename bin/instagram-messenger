@@ -6,7 +6,6 @@ require dirname(__DIR__).'/vendor/autoload.php';
 use InstagramMessenger\Command\GetThreadCommand;
 use InstagramMessenger\Command\GetThreadsCommand;
 use InstagramMessenger\Command\LoginCommand;
-use InstagramMessenger\Enricher\ThreadItemEnricher;
 use InstagramMessenger\Helper\UserHelper;
 use InstagramMessenger\Printer\HumanReadableMessagePrinter;
 use InstagramMessenger\Printer\HumanReadableThreadPrinter;

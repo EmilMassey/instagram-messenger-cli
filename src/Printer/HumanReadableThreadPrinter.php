@@ -2,7 +2,6 @@
 
 namespace InstagramMessenger\Printer;
 
-use InstagramMessenger\Enricher\ThreadItemEnricher;
 use InstagramScraper\Model\Thread;
 use Symfony\Component\Console\Output\OutputInterface;
 
