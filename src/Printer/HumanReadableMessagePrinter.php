@@ -40,9 +40,7 @@ final class HumanReadableMessagePrinter implements MessagePrinterInterface
                 $text = '--- MEDIA ---';
                 break;
             case 'reel_share':
-                if (!$text = $message->getReelShare()->getText()) {
-                    $text = '--- REEL SHARE ---';
-                }
+                $text = $this->getReelShareText($message);
                 break;
             default:
                 $text = $message->getText();
@@ -53,6 +51,46 @@ final class HumanReadableMessagePrinter implements MessagePrinterInterface
         } else {
             $output->writeln(\sprintf('<info>%s%s%s</info>', $header, PHP_EOL, $text));
         }
+    }
+
+    private function getReelShareText(ThreadItem $message): string
+    {
+        $reelShare = $message->getReelShare();
+        $peer = $this->userHelper->getUsernameById($message->getUserId());
+        $owner = $this->userHelper->getUsernameById($reelShare->getOwnerId());
+
+        $isSelfOwner = $owner === $this->cache->get('user');
+
+        switch ($reelShare->getType()) {
+            case 'mention':
+                $mentioned = $this->userHelper->getUsernameById($reelShare->getMentionedId());
+
+                if ($isSelfOwner) {
+                    $text = \sprintf('You mentioned %s in your story', $mentioned);
+                } else {
+                    $text = \sprintf('%s mentioned you in her/his story', $owner);
+                }
+                break;
+            case 'reply':
+                if ($isSelfOwner) {
+                    $text = \sprintf('%s replied to your story', $peer);
+                } else {
+                    $text = \sprintf('You replied to her/his story');
+                }
+                break;
+            default:
+                $text = $reelShare->getText() ?: '--- REEL SHARE ---';
+        }
+
+        if (null !== $reelShare->getMedia() && null !== $image = $reelShare->getMedia()->getImage()) {
+            $text .= \sprintf(': <href=%s>%s</>', $image, $image);
+        }
+
+        if ('reply' && $reelShare->getType() && $reelShare->getText()) {
+            $text .= \sprintf('%s%s%s', PHP_EOL, PHP_EOL, $reelShare->getText());
+        }
+
+        return $text;
     }
 
     private static function getFormattedDateString(int $timestamp): string
